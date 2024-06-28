@@ -79,7 +79,6 @@ if (!isset($_SESSION['user'])) {
                             <div class="row">
                                 <div class="col-md-6">
                                     <h6>Cart</h6>
-                                    <!-- <button class="btn btn-danger" name="clearall">Clear All</button> -->
                                 </div>
                                 <div class="col-md-6">
                                     <button name="clearAll" class="btn btn-danger" style="float:right;">Clear All</button>
@@ -112,12 +111,13 @@ if (!isset($_SESSION['user'])) {
                                 <option value="">Select Option...</option>
                                 <option value="cash">Cash</option>
                                 <option value="Paystack"> PayStack</option>
+                                <option value="Flutterwave"> FlutterWave</option>
                                 <option value="pos">POS</option>
                             </select><br>
                             <label for="">Customer Name</label>
                             <input type="text" id="customer-name" class="form-control" name="customer"><br>
                             <label for="">Customer Phone Number</label>
-                            <input type="number" class="form-control" name="phone"><br>
+                            <input type="number" id="customer-number" class="form-control" name="phone"><br>
                         </div>
                         <div class="card-footer">
                             <div>
@@ -126,12 +126,15 @@ if (!isset($_SESSION['user'])) {
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     Pay with Paystack
                                 </button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#flutterWavePayModal" onclick="getCartInput()">
+                                    Pay with FlutterWave
+                                </button>
                                 <button style="float:right" type="submit" class="btn btn-primary btn-block" name="Checkout">Complete Checkout</button>
                             </div>
                         </div>
                     </div>
                 </form>
-                <!-- Modal -->
+                <!-- PayStack Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -161,6 +164,53 @@ if (!isset($_SESSION['user'])) {
                         </div>
                     </div>
                 </div>
+
+                <!-- FlutterWave Modal -->
+
+                <div class="modal fade" id="flutterWavePayModal" tabindex="-1" aria-labelledby="flutterWavePayModal" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="flutterWavePayModalLabel">Pay with FlutterWave</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="https://checkout.flutterwave.com/v3/hosted/pay">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h6>Payment</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <input type="hidden" name="public_key" value="FLWPUBK_TEST-60431fb4391bdf6bf0b9f0f234adcc04-X" />
+                                            <label for="">Customer Email</label>
+                                            <input type="email" class="form-control" name="customer[email]"><br>
+                                            <label for="">Customer Name</label>
+                                            <input type="text" id="pcustomer-name" class="form-control" name="customer[name]" value=""><br>
+                                            <label for="">Customer Phone Number</label>
+                                            <input type=" tel" id="pcustomer-number" class="form-control" name="phone" value=""><br>
+                                            <input type="hidden" name="tx_ref" value="txref-81123" />
+                                            <label for="">Total Amount</label>
+                                            <input type="" class="form-control" name="amount" value="<?= $total ?>" readonly /><br>
+                                            <input type="hidden" name="currency" value="NGN" />
+                                            <input type="hidden" name="redirect_url" value="localhost/salesmaster/payment_complete.php/" />
+                                            <input type="hidden" name="meta[source]" value="docs-html-test" />
+                                        </div>
+                                        <div class="card-footer">
+                                            <div style="float:right">
+                                                <button type="submit" class="btn btn-primary btn-block" name="PayNow" id="start-payment-button">Pay Now</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
 
@@ -216,7 +266,6 @@ if (!isset($_SESSION['user'])) {
 
 
         <script>
-
             let emptyCart = document.getElementById("empty-cart");
             let cartItems = document.getElementById("cart-items");
 
@@ -275,6 +324,14 @@ if (!isset($_SESSION['user'])) {
                 });
 
                 handler.openIframe();
+            }
+
+            const getCartInput = () => {
+                let customerName = document.getElementById("customer-name").value;
+                let customerPhone = document.getElementById("customer-number").value;
+
+                document.getElementById("pcustomer-name").value = customerName;
+                document.getElementById("pcustomer-number").value = customerPhone;
             }
         </script>
 </body>
