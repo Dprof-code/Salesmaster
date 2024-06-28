@@ -21,6 +21,11 @@ if (!isset($_SESSION['user'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Point of Sale</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        a {
+            text-decoration: none !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -78,7 +83,12 @@ if (!isset($_SESSION['user'])) {
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h6>Cart</h6>
+                                    <div>
+                                        <h3>Cart</h3>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"><?= $sales->sqL1('item', 'salesid', $salesid); ?>
+                                            <span class="visually-hidden">New alerts</span>
+                                        </span>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <button name="clearAll" class="btn btn-danger" style="float:right;">Clear All</button>
@@ -105,7 +115,14 @@ if (!isset($_SESSION['user'])) {
                                 echo '<tr><th colspan="3">Grand Total</th><th>' . number_format($total) . '</th><th></th></tr>';
                                 ?>
                             </table>
+                            <?php $sql = $db->query("SELECT * FROM item WHERE bid='$bid' AND salesid='$salesid' AND status=0");
+                            while ($row = $sql->fetch_assoc()) {
+
+                                echo ' <a href="?restore=' . $row['sn'] .  '">' . $row['item'] .  '</a> | ';
+                            }
+                            ?>
                             <input type="hidden" name="total" value="<?= $total ?>">
+                            <br>
                             <label for="">Mode of Payment</label>
                             <select class="form-control" name="mode">
                                 <option value="">Select Option...</option>
@@ -120,8 +137,6 @@ if (!isset($_SESSION['user'])) {
                             <input type="number" id="customer-number" class="form-control" name="phone"><br>
                         </div>
                         <div class="card-footer">
-                            <div>
-                            </div>
                             <div>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     Pay with Paystack
@@ -268,6 +283,10 @@ if (!isset($_SESSION['user'])) {
         <script>
             let emptyCart = document.getElementById("empty-cart");
             let cartItems = document.getElementById("cart-items");
+
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
 
             let emptyAction = () => {
                 // Assuming you might want to confirm before emptying the cart

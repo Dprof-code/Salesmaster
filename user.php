@@ -10,14 +10,6 @@ if($admin!=1){
 }
 
 
-  if(isset($_GET['sn'])){
-    $sn = $_GET['sn'];
-    $status = $_GET['status'];
-    if(User($sn,'admin')==1){$status=1; }
-    $sql = $db->query("UPDATE user SET status='$status' WHERE sn='$sn' ");
-    header('location: ?');
-}
-
 ?>
 
 

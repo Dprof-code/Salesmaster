@@ -9,6 +9,8 @@ if(!isset($_SESSION['user'])){
 $salesid = $_GET['salesid']??'';
 
 
+
+
 $sql = $db->query("SELECT * FROM business WHERE sn='$bid' ");
 $row = mysqli_fetch_assoc($sql);
 $business = $row['name'];
@@ -23,12 +25,6 @@ $row = mysqli_fetch_assoc($sql);
 $name = $row['customer'];
 $phone = $row['phone'];
 $date = $row['created'];
-
-
-
-//$d = 1718284098;
- //2024-06-13 15:45:17
-
 
 ?>
 
@@ -54,7 +50,7 @@ $date = $row['created'];
 <!-- <h6>Bill To:</h6> -->
 <p>Customer: <?= ucwords($name) ?>
 <!-- <br><?= $phone ?> -->
-<br>Date: <span style="float: rightx; padding-bottom:10px"><?= date('d/m/y h:iA',strtotime($date)) ?></span><br>Receipt ID: <?= $salesid ?><br>Served by: <?= User($user) ?></p>
+<br>Date: <span style="float: rightx; padding-bottom:10px"><?= date('d/m/y h:iA',strtotime($date)) ?></span><br>Receipt ID: <?= $salesid ?><br>Served by: <?= $sales->User($user) ?></p>
 
     <table class="table table-bordered table-sm">
 <tr><th>Qty</th><th>Item</th><th>Price</th><th>Amount</th></tr>

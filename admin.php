@@ -15,40 +15,6 @@ if ($admin != 1) {
     exit;
 }
 
-if (!isset($_SESSION["salesid"])) {
-    $_SESSION["salesid"] = rand();
-}
-
-if (isset($_GET["delete"])) {
-    $sn =  $_GET["delete"];
-    $sql = $db->query("DELETE FROM item WHERE sn = '$sn'");
-    if ($sql) { //Alert('Successfully deleted');
-    } else { //Alert('Error deleting data',0);
-    }
-}
-
-
-if (isset($_GET['edit'])) {
-    $sn = $_GET['edit'];
-    $_SESSION["salesid"] = $_GET['salesid'];
-    $sql = $db->query("DELETE FROM sales WHERE sn='$sn' ");
-    header('location: ?');
-}
-
-function status($status)
-{
-    $rem = "";
-    if ($status == 0) {
-        $rem = 'Deleted';
-    } elseif ($status == 1) {
-        $rem = 'In Cart';
-    } else {
-        $rem = 'Checked Out';
-    }
-
-    echo "$rem";
-}
-
 $salesid = $_SESSION["salesid"];
 
 
@@ -101,7 +67,7 @@ $salesid = $_SESSION["salesid"];
                             $sql = $db->query("SELECT * FROM item WHERE bid='$bid' ORDER BY sn DESC LIMIT 100");
                             while ($row = $sql->fetch_assoc()) { ?>
                                 <tr>
-                                    <td><?= User($row['user']) ?></td>
+                                    <td><?= $sales->User($row['user']) ?></td>
                                     <td><?= $row['item'] ?></td>
                                     <td><?=number_format($row['price']) ?></td>
                                     <td><?= $row['qty'] ?></td>
@@ -123,7 +89,7 @@ $salesid = $_SESSION["salesid"];
                 </div>
             </div>
         </div>
-
+    </div>
         <script src="js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript">
             const toastTrigger = document.getElementById('liveToastBtn')

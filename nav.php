@@ -32,7 +32,10 @@
                     <a href="transactions.php" class="nav-link">Transactions</a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin.php" class="nav-link">Admin</a>
+                    <a href="admin.php" class="nav-link">Track</a>
+                </li>
+                <li class="nav-item">
+                    <a href="product.php" class="nav-link">Store</a>
                 </li>
                 <li class="nav-item">
                     <a href="user.php" class="nav-link">Users</a>
